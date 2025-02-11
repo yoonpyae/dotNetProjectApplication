@@ -71,7 +71,7 @@ namespace dotNetProject.Controllers
         [EndpointSummary("Update Users")]
         public IActionResult UpdateUser(string id, string newUser)
         {
-            var user = _context.Users.FirstOrDefault(x => x.UserId == id);
+
 
             var users = _context.Users.SingleOrDefault(y => y.UserId == id);
             if (users == null)

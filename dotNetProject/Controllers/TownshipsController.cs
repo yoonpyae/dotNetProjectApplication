@@ -1,9 +1,6 @@
 ﻿using dotNetProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace dotNetProject.Controllers
 {
@@ -78,8 +75,8 @@ namespace dotNetProject.Controllers
             {
                 return BadRequest("Township Already Exist");
             }
-            _context.Townships.Add(township);
-            await _context.SaveChangesAsync();
+            _ = _context.Townships.Add(township);
+            _ = await _context.SaveChangesAsync();
             return Created("api/Townships", new DefaultResponseModel()
             {
                 Success = true,
@@ -107,8 +104,8 @@ namespace dotNetProject.Controllers
             }
             townshipData.TownshipName = township.TownshipName;
             townshipData.Latitude = township.Latitude;
-            _context.Townships.Update(townshipData);
-            await _context.SaveChangesAsync();
+            _ = _context.Townships.Update(townshipData);
+            _ = await _context.SaveChangesAsync();
             return Ok(new DefaultResponseModel()
             {
                 Success = true,
@@ -134,8 +131,8 @@ namespace dotNetProject.Controllers
                     Message = "Township Not Found."
                 });
             }
-            _context.Townships.Remove(township);
-            await _context.SaveChangesAsync();
+            _ = _context.Townships.Remove(township);
+            _ = await _context.SaveChangesAsync();
             return Ok(new DefaultResponseModel()
             {
                 Success = true,
