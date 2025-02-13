@@ -1,26 +1,20 @@
 ﻿using dotNetProject.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotNetProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController(AppDbContext context) : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public UsersController(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         [HttpGet]
         [EndpointSummary("Get all users")]
         [EndpointDescription("Get all users")]
         public IActionResult GetUsers()
         {
-            var users = _context.Users.ToList();
+            List<User> users = _context.Users.ToList();
             return Ok(users);
         }
 
@@ -34,7 +28,7 @@ namespace dotNetProject.Controllers
                 return BadRequest("User Already Exist");
             }
 
-            _context.Users.Add(user);
+            _ = _context.Users.Add(user);
             return Ok(_context.SaveChanges());
         }
 
@@ -42,27 +36,25 @@ namespace dotNetProject.Controllers
         [EndpointSummary("Get By User Id")]
         public IActionResult GetUserById(string id)
         {
-            var user = _context.Users.SingleOrDefault(y => y.UserId == id);
-            if (user == null)
-            {
-                return BadRequest("User Not Found");
-            }
-            return Ok(user);
+            User? user = _context.Users.SingleOrDefault(y => y.UserId == id);
+            return user == null ? BadRequest("User Not Found") : Ok(user);
         }
 
         [HttpDelete("{id}")]
         [EndpointSummary("Delete User")]
         public IActionResult DeleteUser(string id)
         {
-            var user = _context.Users.Find(id);
+            User? user = _context.Users.Find(id);
 
-            var users = _context.Users.SingleOrDefault(y => y.UserId == id);
+            User? users = _context.Users.SingleOrDefault(y => y.UserId == id);
             if (users == null)
             {
                 return BadRequest("User Not Found");
             }
             if (user != null)
-                _context.Users.Remove(user);
+            {
+                _ = _context.Users.Remove(user);
+            }
 
             return Ok(_context.SaveChanges());
         }
@@ -73,7 +65,7 @@ namespace dotNetProject.Controllers
         {
 
 
-            var users = _context.Users.SingleOrDefault(y => y.UserId == id);
+            User? users = _context.Users.SingleOrDefault(y => y.UserId == id);
             if (users == null)
             {
                 return BadRequest("User Not Found");

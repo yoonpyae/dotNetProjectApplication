@@ -6,13 +6,9 @@ namespace dotNetProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TownshipsController : ControllerBase
+    public class TownshipsController(AppDbContext context) : ControllerBase
     {
-        private readonly AppDbContext _context;
-        public TownshipsController(AppDbContext context)
-        {
-            _context = context;
-        }
+        private readonly AppDbContext _context = context;
 
         #region CRUD Operation
 
